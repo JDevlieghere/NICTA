@@ -62,8 +62,11 @@ the contents of c
 -- /Tip:/ use @getArgs@ and @run@
 main ::
   IO ()
-main =
-  error "todo"
+main = do
+  args <- getArgs
+  case args of
+    Nil -> error "No argument supplied"
+    (arg :. _) -> run arg
 
 type FilePath =
   Chars
@@ -72,31 +75,32 @@ type FilePath =
 run ::
   Chars
   -> IO ()
-run =
-  error "todo"
+run arg = do
+  content <- readFile arg
+  files   <- getFiles $ lines content
+  printFiles files
 
 getFiles ::
   List FilePath
   -> IO (List (FilePath, Chars))
-getFiles =
-  error "todo"
+getFiles = sequence . map getFile
 
 getFile ::
   FilePath
   -> IO (FilePath, Chars)
-getFile =
-  error "todo"
+getFile fp = do
+  contents <- readFile fp
+  return (fp, contents)
 
 printFiles ::
   List (FilePath, Chars)
   -> IO ()
-printFiles =
-  error "todo"
+printFiles = foldLeft (\_ (x,y) -> printFile x y) (return ())
 
 printFile ::
   FilePath
   -> Chars
   -> IO ()
-printFile =
-  error "todo"
-
+printFile fp c = do
+  putStrLn $ replicate 12 '=' ++ fp
+  putStrLn c
