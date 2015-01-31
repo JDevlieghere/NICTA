@@ -233,7 +233,7 @@ flattenAgain = flatMap (id)
 seqOptional ::
   List (Optional a)
   -> Optional (List a)
-seqOptional = error "todo"
+seqOptional = foldRight (twiceOptional (:.)) (Full Nil)
 
 -- | Find the first element in the list matching the predicate.
 --
@@ -293,8 +293,7 @@ lengthGT4 _ = False
 reverse ::
   List a
   -> List a
-reverse Nil = Nil
-reverse (h :. t) = (reverse t) ++ (h :. Nil)
+reverse = foldLeft (flip (:.)) Nil
 
 -- | Produce an infinite `List` that seeds with the given value at its head,
 -- then runs the given function for subsequent elements
@@ -322,7 +321,7 @@ produce f x = x :. produce f (f x)
 notReverse ::
   List a
   -> List a
-notReverse xs = xs
+notReverse = reverse
 
 
 ---- End of list exercises
